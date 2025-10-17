@@ -1,0 +1,10 @@
+{
+  "title": "Weather Forecast",
+  "subtitle": "Get instant weather updates 🌤️",
+  "placeholder": "Enter city name...",
+  "search": "Search",
+  "loading": "Loading weather...",
+  "city_not_found": "City not found. Try again.",
+  "humidity": "Humidity: {{value}}%",
+  "degree": "{{value}}°C"
+}
