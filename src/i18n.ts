@@ -2,9 +2,15 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
-// import translations (simple synchronous approach)
+// import translations
 import enTranslation from "./locales/en/en.json";
-import neTranslation from "./locales/ne/ne.json";
+import neTranslation from "./locales/np/np.json";
+
+// Helper function to convert English digits to Nepali digits
+const toNepaliDigits = (num: string | number) => {
+  const digits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+  return num.toString().replace(/\d/g, (d) => digits[parseInt(d)]);
+};
 
 const resources = {
   en: { translation: enTranslation },
@@ -12,17 +18,24 @@ const resources = {
 };
 
 i18n
-  .use(LanguageDetector) // detect user language (from navigator/localStorage/cookie)
-  .use(initReactI18next) // connect with react
+  .use(LanguageDetector)
+  .use(initReactI18next)
   .init({
     resources,
     fallbackLng: "en",
     debug: false,
     interpolation: {
-      escapeValue: false, // react already safes from xss
+      escapeValue: false,
+
+      // a formatter for Nepali digits
+      format: (value, format, lng) => {
+        if (format === "nepaliDigits" && lng === "ne") {
+          return toNepaliDigits(value);
+        }
+        return value;
+      },
     },
     detection: {
-      // order and options for language detection
       order: ["localStorage", "navigator", "htmlTag", "path", "subdomain"],
       caches: ["localStorage"],
     },

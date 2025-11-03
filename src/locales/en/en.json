@@ -1,10 +1,39 @@
 {
-  "title": "Weather Forecast",
-  "subtitle": "Get instant weather updates 🌤️",
+  "title": "Weather App",
+  "subtitle": "Check the weather forecast for any city in Nepal",
   "placeholder": "Enter city name...",
   "search": "Search",
-  "loading": "Loading weather...",
-  "city_not_found": "City not found. Try again.",
+  "city_not_found": "City not found. Please try again.",
+  "degree": "{{value}}°C",
   "humidity": "Humidity: {{value}}%",
-  "degree": "{{value}}°C"
+  
+  "cities": {
+    "Kathmandu": "Kathmandu",
+    "Lalitpur": "Lalitpur",
+    "Bhaktapur": "Bhaktapur",
+    "Pokhara": "Pokhara",
+    "Biratnagar": "Biratnagar",
+    "Birgunj": "Birgunj",
+    "Butwal": "Butwal",
+    "Hetauda": "Hetauda",
+    "Janakpur": "Janakpur",
+    "Dhangadhi": "Dhangadhi",
+    "Nepalgunj": "Nepalgunj",
+    "Dharan": "Dharan",
+    "Itahari": "Itahari",
+    "Tansen": "Tansen",
+    "Bharatpur": "Bharatpur"
+  },
+
+  "weather_desc": {
+    "clear sky": "Clear sky",
+    "few clouds": "Few clouds",
+    "scattered clouds": "Scattered clouds",
+    "broken clouds": "Broken clouds",
+    "shower rain": "Shower rain",
+    "rain": "Rain",
+    "thunderstorm": "Thunderstorm",
+    "snow": "Snow",
+    "mist": "Mist"
+  }
 }
