@@ -37,7 +37,6 @@ function Home() {
     fetchDefaultCities();
   }, [API_KEY, i18n.language]);
 
-  // Handle search city
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!city.trim()) {
@@ -62,115 +61,118 @@ function Home() {
     }
   };
 
-  // Handle language change
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     i18n.changeLanguage(e.target.value);
   };
 
-  // Translate city and weather safely
-  const translateCity = (cityName: string) => {
-    return t(`cities.${cityName}`, cityName);
-  };
-
-  const translateWeather = (desc: string) => {
-    return t(`weather_desc.${desc}`, desc);
-  };
+  const translateCity = (cityName: string) => t(`cities.${cityName}`, cityName);
+  const translateWeather = (desc: string) => t(`weather_desc.${desc}`, desc);
 
   return (
     <div
-      className="w-screen bg-cover bg-center relative"
+      className="w-screen bg-cover bg-center relative min-h-screen"
       style={{
         backgroundImage: `url(${bgImage})`,
-        height: "100vh",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
       }}
     >
+      {/* Overlay */}
       <div className="absolute inset-0 bg-black/40"></div>
 
       {/* Language Switcher */}
-      <div className="absolute top-4 right-4 z-10">
+      <div className="absolute top-1 right-4 z-10">
         <select
           onChange={handleLanguageChange}
           value={i18n.language}
-          className="px-2 py-1 rounded border border-gray-300 bg-white/80"
+          className="px-3 py-1 rounded border border-gray-300 bg-white/80 text-sm sm:text-base"
         >
           <option value="en">English</option>
           <option value="ne">नेपाली</option>
         </select>
       </div>
 
-      {/* content */}
-      <div className="relative z-5 text-center px-4 flex flex-col items-center h-full">
-        <h1 className="text-4xl mt-2 mb-2 font-bold text-white drop-shadow-lg">
+      {/* Main content */}
+      <div className="relative z-5 text-center px-4 flex flex-col items-center justify-start min-h-screen pt-4 sm:pt-6">
+
+        <h1 className="text-3xl sm:text-4xl mt-1 mb-2 font-bold text-white drop-shadow-lg text-center">
           {t("title")}
         </h1>
-        <p className="text-lg mt-2 mb-5 text-gray-200">{t("subtitle")}</p>
 
-        {/* search bar */}
+        <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-6">
+          {t("subtitle")}
+        </p>
+
+        {/* Search bar */}
         <form
           onSubmit={handleSearch}
-          className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+          className="flex flex-col sm:flex-row gap-3 w-full max-w-md mx-auto"
         >
           <input
             type="text"
             placeholder={t("placeholder")}
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className="w-full px-4 py-2 text-white bg-transparent border-2 border-white"
+            className="flex-1 px-4 py-2 text-white bg-transparent border-2 border-white rounded-md text-sm sm:text-base focus:outline-none"
           />
           <button
             type="submit"
-            className="bg-blue-600 border-2 border-black px-4 py-2 font-medium text-white rounded hover:bg-blue-700 transition-colors duration-300"
+            className="bg-blue-600 border-2 border-black px-4 py-2 font-medium text-white rounded-md hover:bg-blue-700 transition-colors duration-300 text-sm sm:text-base"
           >
             {t("search")}
           </button>
         </form>
 
-        {error && <p className="mt-4 text-red-300">{error}</p>}
+        {error && (
+          <p className="mt-4 text-red-300 text-sm sm:text-base">{error}</p>
+        )}
 
         {/* Default Cities */}
-        <div className="flex flex-wrap justify-center gap-4 mt-6">
+        <div className="flex flex-wrap justify-center gap-4 mt-6 px-2">
           {defaultWeathers.map((w, index) => (
             <div
               key={index}
-              className="px-12 py-3 bg-white/20 rounded-xl backdrop-blur-md text-white shadow-lg text-center"
+              className="px-8 sm:px-10 py-4 bg-white/20 rounded-xl backdrop-blur-md text-white shadow-lg text-center w-60 sm:w-64"
             >
-              <h2 className="font-semibold">{translateCity(w.name)}</h2>
-              <p className="capitalize text-lg">
+              <h2 className="font-semibold text-lg sm:text-xl">
+                {translateCity(w.name)}
+              </h2>
+              <p className="capitalize text-sm sm:text-lg">
                 {translateWeather(w.weather[0].description)}
               </p>
-              <p className="text-4xl font-bold mt-2">
+              <p className="text-3xl sm:text-4xl font-bold mt-2">
                 {t("degree", { value: w.main.temp })}
               </p>
               <img
                 src={`https://openweathermap.org/img/wn/${w.weather[0].icon}@2x.png`}
                 alt={w.weather[0].description}
-                className="mx-auto"
+                className="mx-auto w-16 sm:w-20"
               />
-              <p className="text-sm text-gray-200">
+              <p className="text-xs sm:text-sm text-gray-200">
                 {t("humidity", { value: w.main.humidity })}
               </p>
             </div>
           ))}
         </div>
 
-        {/* Searched city */}
+        {/* Searched City */}
         {weather && (
-          <div className="mt-6 px-13 py-2 bg-white/20 rounded-xl backdrop-blur-md text-white shadow-lg text-center">
-            <h2 className="font-semibold">{translateCity(weather.name)}</h2>
-            <p className="capitalize text-lg">
+          <div className="mt-6 px-8 sm:px-12 py-4 bg-white/20 rounded-xl backdrop-blur-md text-white shadow-lg text-center w-60 sm:w-64">
+            <h2 className="font-semibold text-lg sm:text-xl">
+              {translateCity(weather.name)}
+            </h2>
+            <p className="capitalize text-sm sm:text-lg">
               {translateWeather(weather.weather[0].description)}
             </p>
-            <p className="text-4xl font-bold mt-2">
+            <p className="text-3xl sm:text-4xl font-bold mt-2">
               {t("degree", { value: weather.main.temp })}
             </p>
             <img
               src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
               alt={weather.weather[0].description}
-              className="mx-auto"
+              className="mx-auto w-16 sm:w-20"
             />
-            <p className="text-sm text-gray-200">
+            <p className="text-xs sm:text-sm text-gray-200">
               {t("humidity", { value: weather.main.humidity })}
             </p>
           </div>
