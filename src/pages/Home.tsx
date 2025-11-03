@@ -157,7 +157,7 @@ function Home() {
 
         {/* Searched city */}
         {weather && (
-          <div className="mt-6 px-12 py-3 bg-white/20 rounded-xl backdrop-blur-md text-white shadow-lg text-center">
+          <div className="mt-6 px-13 py-2 bg-white/20 rounded-xl backdrop-blur-md text-white shadow-lg text-center">
             <h2 className="font-semibold">{translateCity(weather.name)}</h2>
             <p className="capitalize text-lg">
               {translateWeather(weather.weather[0].description)}
