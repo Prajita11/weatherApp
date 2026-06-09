@@ -1,0 +1,40 @@
+{
+  "title": "Aplicación del clima",
+  "subtitle": "Consulta el pronóstico del tiempo para cualquier ciudad del mundo.",
+  "placeholder": "Ingresa el nombre de la ciudad...",
+  "search": "Buscar",
+  "city_not_found": "Ciudad no encontrada. Por favor intenta de nuevo.",
+  "degree": "{{value}}°{{unit}}",
+  "humidity": "Humedad: {{value}}%",
+
+  "cities": {
+    "Kathmandu": "Kathmandu",
+    "Lalitpur": "Lalitpur",
+    "Bhaktapur": "Bhaktapur",
+    "Pokhara": "Pokhara",
+    "San Francisco": "San Francisco",
+    "Oakland": "Oakland",
+    "Richmond": "Richmond",
+    "New York": "Nueva York",
+    "Los Angeles": "Los Ángeles",
+    "San Mateo": "San Mateo",
+    "San Jose": "San José",
+    "Santa Clara": "Santa Clara"
+  },
+
+  "weather_desc": {
+    "clear sky": "Cielo claro",
+    "few clouds": "Pocas nubes",
+    "scattered clouds": "Nubes dispersas",
+    "broken clouds": "Nubes rotas",
+    "shower rain": "Lluvia ligera",
+    "rain": "Lluvia",
+    "thunderstorm": "Tormenta",
+    "snow": "Nieve",
+    "mist": "Niebla",
+    "overcast clouds": "Cielo nublado",
+    "light rain": "Lluvia ligera",
+    "moderate rain": "Lluvia moderada",
+    "heavy intensity rain": "Lluvia intensa"
+  }
+}

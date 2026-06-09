@@ -1,10 +1,10 @@
 {
   "title": "Weather App",
-  "subtitle": "Check the weather forecast for any city in Nepal",
+  "subtitle": "Check the weather forecast for any city all over the world.",
   "placeholder": "Enter city name...",
   "search": "Search",
   "city_not_found": "City not found. Please try again.",
-  "degree": "{{value}}°C",
+  "degree": "{{value}}°{{unit}}",
   "humidity": "Humidity: {{value}}%",
   
   "cities": {
@@ -12,17 +12,14 @@
     "Lalitpur": "Lalitpur",
     "Bhaktapur": "Bhaktapur",
     "Pokhara": "Pokhara",
-    "Biratnagar": "Biratnagar",
-    "Birgunj": "Birgunj",
-    "Butwal": "Butwal",
-    "Hetauda": "Hetauda",
-    "Janakpur": "Janakpur",
-    "Dhangadhi": "Dhangadhi",
-    "Nepalgunj": "Nepalgunj",
-    "Dharan": "Dharan",
-    "Itahari": "Itahari",
-    "Tansen": "Tansen",
-    "Bharatpur": "Bharatpur"
+    "San Francisco": "San Francisco",
+    "New York": "New York",
+    "Richmond": "Richmond",
+    "Los Angeles": "Los Angeles",
+    "San Mateo": "San Mateo",
+    "San Jose": "San Jose",
+    "Santa Clara": "Santa Clara"
+
   },
 
   "weather_desc": {

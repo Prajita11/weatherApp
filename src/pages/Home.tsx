@@ -11,23 +11,24 @@ interface WeatherData {
   weather: { description: string; icon: string }[];
 }
 
+const defaultCities = ["San Francisco", "Oakland", "Richmond"];
+
 function Home() {
   const [city, setCity] = useState("");
-  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [searchedWeathers, setSearchedWeathers] = useState<WeatherData[]>([]);
   const [defaultWeathers, setDefaultWeathers] = useState<WeatherData[]>([]);
   const [error, setError] = useState("");
+  const [units, setUnits] = useState<string>(() => localStorage.getItem("units") || "metric");
 
   const { t, i18n } = useTranslation();
   const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
-
-  const defaultCities = ["Kathmandu", "Lalitpur", "Bhaktapur"];
 
   useEffect(() => {
     async function fetchDefaultCities() {
       const data = await Promise.all(
         defaultCities.map(async (city) => {
           const res = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=${i18n.language}`
+            `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=${units}`
           );
           return res.json();
         })
@@ -35,7 +36,7 @@ function Home() {
       setDefaultWeathers(data.filter((d) => d.cod === 200));
     }
     fetchDefaultCities();
-  }, [API_KEY, i18n.language]);
+  }, [API_KEY, units]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,23 +47,28 @@ function Home() {
 
     try {
       const res = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=${i18n.language}`
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=${units}&lang=${i18n.language}`
       );
       const data = await res.json();
       if (data.cod === 200) {
-        setWeather(data);
+        setSearchedWeathers((prev) => [data, ...prev.filter((item) => item.name !== data.name)].slice(0, 3));
         setError("");
       } else {
         setError(t("city_not_found"));
-        setWeather(null);
       }
     } catch {
       setError(t("city_not_found"));
     }
   };
 
+  // fetch forecast for a city name
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     i18n.changeLanguage(e.target.value);
+  };
+
+  const handleUnitChange = (newUnit: string) => {
+    setUnits(newUnit);
+    localStorage.setItem("units", newUnit);
   };
 
   const translateCity = (cityName: string) => t(`cities.${cityName}`, cityName);
@@ -89,7 +95,23 @@ function Home() {
         >
           <option value="en">English</option>
           <option value="ne">नेपाली</option>
+          <option value="es">Español</option>
         </select>
+      </div>
+      {/* Units Toggle(C & F) */}
+      <div className="absolute top-1 right-28 z-10 flex gap-2">
+        <button
+          onClick={() => handleUnitChange("metric")}
+          className={`px-2 py-1 rounded ${units === "metric" ? "bg-white/90 text-black" : "bg-white/30 text-white"}`}
+        >
+          °C
+        </button>
+        <button
+          onClick={() => handleUnitChange("imperial")}
+          className={`px-2 py-1 rounded ${units === "imperial" ? "bg-white/90 text-black" : "bg-white/30 text-white"}`}
+        >
+          °F
+        </button>
       </div>
 
       {/* Main content */}
@@ -131,8 +153,9 @@ function Home() {
         <div className="flex flex-wrap justify-center gap-4 mt-6 px-2">
           {defaultWeathers.map((w, index) => (
             <div
-              key={index}
-              className="px-8 sm:px-10 py-4 bg-white/20 rounded-xl backdrop-blur-md text-white shadow-lg text-center w-60 sm:w-64"
+                  key={index}
+                  className="px-8 sm:px-10 py-4 bg-white/20 rounded-xl backdrop-blur-md text-white shadow-lg text-center w-60 sm:w-64"
+                  style={{ minHeight: "14rem", transition: "opacity 200ms ease" }}
             >
               <h2 className="font-semibold text-lg sm:text-xl">
                 {translateCity(w.name)}
@@ -141,7 +164,10 @@ function Home() {
                 {translateWeather(w.weather[0].description)}
               </p>
               <p className="text-3xl sm:text-4xl font-bold mt-2">
-                {t("degree", { value: w.main.temp })}
+                {t("degree", {
+                  value: w.main.temp,
+                  unit: units === "metric" ? "C" : "F",
+                })}
               </p>
               <img
                 src={`https://openweathermap.org/img/wn/${w.weather[0].icon}@2x.png`}
@@ -155,28 +181,41 @@ function Home() {
           ))}
         </div>
 
-        {/* Searched City */}
-        {weather && (
-          <div className="mt-6 px-8 sm:px-12 py-4 bg-white/20 rounded-xl backdrop-blur-md text-white shadow-lg text-center w-60 sm:w-64">
-            <h2 className="font-semibold text-lg sm:text-xl">
-              {translateCity(weather.name)}
-            </h2>
-            <p className="capitalize text-sm sm:text-lg">
-              {translateWeather(weather.weather[0].description)}
-            </p>
-            <p className="text-3xl sm:text-4xl font-bold mt-2">
-              {t("degree", { value: weather.main.temp })}
-            </p>
-            <img
-              src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
-              alt={weather.weather[0].description}
-              className="mx-auto w-16 sm:w-20"
-            />
-            <p className="text-xs sm:text-sm text-gray-200">
-              {t("humidity", { value: weather.main.humidity })}
-            </p>
+        {/* Searched Cities */}
+        {searchedWeathers.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-4 mt-6 px-2">
+            {searchedWeathers.map((w, index) => (
+              <div
+                key={`${w.name}-${index}`}
+                  className="px-8 sm:px-10 py-4 bg-white/20 rounded-xl backdrop-blur-md text-white shadow-lg text-center w-60 sm:w-64"
+                  style={{ minHeight: "14rem", transition: "opacity 200ms ease" }}
+              >
+                <h2 className="font-semibold text-lg sm:text-xl">
+                  {translateCity(w.name)}
+                </h2>
+                <p className="capitalize text-sm sm:text-lg">
+                  {translateWeather(w.weather[0].description)}
+                </p>
+                <p className="text-3xl sm:text-4xl font-bold mt-2">
+                  {t("degree", {
+                    value: w.main.temp,
+                    unit: units === "metric" ? "C" : "F",
+                  })}
+                </p>
+                <img
+                  src={`https://openweathermap.org/img/wn/${w.weather[0].icon}@2x.png`}
+                  alt={w.weather[0].description}
+                  className="mx-auto w-16 sm:w-20"
+                />
+                <p className="text-xs sm:text-sm text-gray-200">
+                  {t("humidity", { value: w.main.humidity })}
+                </p>
+              </div>
+            ))}
           </div>
         )}
+        
+       
       </div>
     </div>
   );

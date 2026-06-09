@@ -5,6 +5,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 // import translations
 import enTranslation from "./locales/en/en.json";
 import neTranslation from "./locales/np/np.json";
+import esTranslation from "./locales/es/es.json";
 
 // Helper function to convert English digits to Nepali digits
 const toNepaliDigits = (num: string | number) => {
@@ -15,6 +16,7 @@ const toNepaliDigits = (num: string | number) => {
 const resources = {
   en: { translation: enTranslation },
   ne: { translation: neTranslation },
+  es: { translation: esTranslation },
 };
 
 i18n
